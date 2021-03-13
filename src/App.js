@@ -5,19 +5,15 @@ import './App.css'
 
 
 /*
-
  > currencies- all available currency pairs on Coinbase
  > pair- current currency pair selected by the user
  > price- price of the current currency
  > pastData- historical price data from current currency
 
-
- 3 variables to store:
-
+3 variables to store:
  > ws- a useRef hook to create a persistent websocket object
  > url- a base URL to the coinbase API
- > first- another useRef hook to prevent an initial render(I’ll cover this in depth later)
-
+ > first- another useRef hook to prevent an initial render
 */
 
 function App() {
@@ -31,7 +27,12 @@ function App() {
   let first = useRef(false)
   const apiUrl= 'https://api.pro.coinbase.com'
 
-  
+  // useEffect hook: 
+
+  useEffect(() => {
+
+  }, [])
+
 
 
 
