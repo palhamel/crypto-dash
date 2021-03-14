@@ -27,7 +27,9 @@ function App() {
         .then((data) => (pairsArray = data))
       // console.log('pairsArray data:', pairsArray)
 
-      const err = console.log('first run - no currency - please select a currency pair')
+      const err = console.log(
+        'first run - no currency - please select a currency pair'
+      )
 
       // filter res data:
       let filteredArray = pairsArray.filter((pair) => {
@@ -119,24 +121,27 @@ function App() {
 
     setPair(e.target.value)
   }
-console.log('price:', price)
-console.log('pastData obj:', pastData)
+  console.log('price:', price)
+  console.log('pastData obj:', pastData)
 
   return (
-    <div className='container'>
-      {
-        <select name='currency' value={pair} onChange={handleSelect}>
-          {currencies.map((cur, idx) => {
-            return (
-              <option key={idx} value={cur.id}>
-                {cur.display_name}
-              </option>
-            )
-          })}
-        </select>
-      }
-      <Dashboard price={price} data={pastData} />
-      {price < 1 ? 'No data loaded' : 'Loaded data + live update'}
+    <div>
+      <div className='container'>
+      <h2>Crypto/stock/currency dashboard project - in progress</h2>
+        {
+          <select name='currency' value={pair} onChange={handleSelect}>
+            {currencies.map((cur, idx) => {
+              return (
+                <option key={idx} value={cur.id}>
+                  {cur.display_name}
+                </option>
+              )
+            })}
+          </select>
+        }
+        <Dashboard price={price} data={pastData} />
+        {price < 1 ? 'No data loaded' : 'Loaded data + live update'}
+      </div>
     </div>
   )
 }
