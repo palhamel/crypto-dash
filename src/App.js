@@ -1,20 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Dashboard from './components/Dashboard'
-import { formatData } from "./utils";
+import { formatData } from './utils'
 
-// import './App.css'
 import './styles.css'
-/*
-1 currencies: all available currency pairs on Coinbase
-2 pair: current currency pair selected by the user
-3 price: price of the current currency
-4 pastData: historical price data from current currency
-
-3 variables to store:
- > ws: a useRef hook to create a persistent websocket object
- > url: a base URL to the coinbase API
- > first: another useRef hook to prevent an initial render
-*/
 
 function App() {
   // useState:
@@ -25,13 +13,11 @@ function App() {
   // variables:
   const ws = useRef(null)
   let first = useRef(false)
-  // variable base api url:
-  const url = 'https://api.pro.coinbase.com'
+  const url = 'https://api.pro.coinbase.com' // variable base api url:
 
   // useEffect hook nr 1:
   useEffect(() => {
     ws.current = new WebSocket('wss://ws-feed.pro.coinbase.com') // init websocket feed
-
     let pairsArray = [] // init empty Array
 
     // async API call:
@@ -39,16 +25,19 @@ function App() {
       await fetch(url + '/products')
         .then((res) => res.json())
         .then((data) => (pairsArray = data))
-      console.log('pairsArray data:', pairsArray)
+      // console.log('pairsArray data:', pairsArray)
+
+      const err = console.log('first run - no currency - please select a currency pair')
 
       // filter res data:
       let filteredArray = pairsArray.filter((pair) => {
         if (pair.quote_currency === 'USD') {
-          return pair;
+          return pair
+        } else {
+          return err
         }
-        console.log('data in pair:', pair)
-        return null;
-      });
+        // console.log('data in pair:', pair)
+      })
       // console.log('filteredArray data:', filteredArray)
 
       // sort data alphabetically:
@@ -72,22 +61,6 @@ function App() {
   }, []) // TODO: <== check dependency array
 
   // useEffect hook nr 2, to select additional data :
-  // useEffect(() => {
-  //   // prevent this hook to run  before the first hook:
-  //   if (!first.current) {
-  //     console.log('first hook didnt run')
-  //     return
-  //   }
-  //   // Websocket feed - subscribe:
-  //   let msg = {
-  //     type: "subscribe",
-  //     product_ids: [pair],
-  //     channels: ["ticker"]
-  //   }
-  //   let msgAsJson = JSON.stringify(msg)
-  //   ws.current.send(msgAsJson)
-  // }, [])
-
   useEffect(() => {
     //prevents this hook from running on initial render
     if (!first.current) {
@@ -115,8 +88,8 @@ function App() {
         .then((data) => (dataArr = data))
 
       //helper function to format data that will be implemented later TODO:
-      let formattedData = formatData(dataArr);
-      setPastData(formattedData);
+      let formattedData = formatData(dataArr)
+      setPastData(formattedData)
     }
     //run async function to get historical data
     fetchHistoricalData()
@@ -136,32 +109,34 @@ function App() {
 
   const handleSelect = (e) => {
     let unsubMsg = {
-      type: "unsubscribe",
+      type: 'unsubscribe',
       product_ids: [pair],
-      channels: ["ticker"]
-    };
-    let unsub = JSON.stringify(unsubMsg);
+      channels: ['ticker'],
+    }
+    let unsub = JSON.stringify(unsubMsg)
 
-    ws.current.send(unsub);
+    ws.current.send(unsub)
 
-    setPair(e.target.value);
-  };
-
+    setPair(e.target.value)
+  }
+console.log('price:', price)
+console.log('pastData obj:', pastData)
 
   return (
-    <div className="container">
+    <div className='container'>
       {
-        <select name="currency" value={pair} onChange={handleSelect}>
+        <select name='currency' value={pair} onChange={handleSelect}>
           {currencies.map((cur, idx) => {
             return (
               <option key={idx} value={cur.id}>
                 {cur.display_name}
               </option>
-            );
+            )
           })}
         </select>
       }
       <Dashboard price={price} data={pastData} />
+      {price < 1 ? 'No data loaded' : 'Loaded data + live update'}
     </div>
   )
 }
