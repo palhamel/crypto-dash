@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import Dashboard from './components/Dashboard'
 
 import logo from './logo.svg'
 import './App.css'
@@ -25,12 +26,24 @@ function App() {
   // variables:
   const ws = useRef(null)
   let first = useRef(false)
-  const apiUrl= 'https://api.pro.coinbase.com'
+  const url = 'https://api.pro.coinbase.com'
 
   // useEffect hook: 
-
   useEffect(() => {
+    ws.current = new WebSocket('wss://ws-feed.pro.coinbase.com') // init websocket feed
 
+    let pairsArray = [] // empty Array 
+
+    // async API call: 
+    const apiCall = async () => {
+      await fetch(url + "/products")
+      .then((res) => res.json())
+      .then((data) => (pairsArray = data))
+      console.log('pairsarray data:', pairsArray)
+      
+    }
+
+    apiCall() // call function
   }, [])
 
 
@@ -41,18 +54,10 @@ function App() {
   return (
     <div className='App'>
       <header className='App-header'>
-        <img src={logo} className='App-logo' alt='logo' />
         <p>
-          Edit <code>src/App.js</code> and saasdfasdfasdfve to reload.
+          Lets do this - code.
         </p>
-        <a
-          className='App-link'
-          href='https://reactjs.org'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          Learn React
-        </a>
+
       </header>
     </div>
   )
