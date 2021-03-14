@@ -39,13 +39,15 @@ function App() {
       await fetch(url + '/products')
         .then((res) => res.json())
         .then((data) => (pairsArray = data))
-      // console.log('pairsArray data:', pairsArray)
+      console.log('pairsArray data:', pairsArray)
 
       // filter res data:
       let filteredArray = pairsArray.filter((pair) => {
         if (pair.quote_currency === 'USD') {
           return pair;
         }
+        console.log('data in pair:', pair)
+        return null;
       });
       // console.log('filteredArray data:', filteredArray)
 
@@ -89,10 +91,10 @@ function App() {
   useEffect(() => {
     //prevents this hook from running on initial render
     if (!first.current) {
+      console.log('first hook didnt run')
       return
     }
-
-    console.log('running on pair change')
+    console.log('running second hook')
 
     let msg = {
       type: 'subscribe',
